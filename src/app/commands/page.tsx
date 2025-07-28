@@ -152,35 +152,51 @@ export default function Commands() {
     <Layout>
       <div className="space-y-8">
         {/* Hero Header */}
-        <div className="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 rounded-2xl shadow-lg p-6 border border-blue-100">
+        <div className="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 rounded-2xl shadow-lg p-4 sm:p-6 border border-blue-100">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex items-center space-x-3">
               <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
                 <span className="text-white text-2xl">⚡</span>
               </div>
               <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                   Command Vault
                 </h1>
-                <p className="text-gray-600 text-base mt-1">
+                <p className="text-gray-600 text-sm sm:text-base mt-1">
                   {filteredCommands.length} of {mockCommands.length} commands ready to use
                 </p>
               </div>
             </div>
             <Link
               href="/add-command"
-              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105 duration-200 font-semibold"
+              className="inline-flex items-center px-4 sm:px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105 duration-200 font-semibold text-sm sm:text-base"
             >
               <span className="mr-2 text-lg">➕</span>
-              Add New Command
+              <span className="hidden sm:inline">Add New Command</span>
+              <span className="sm:hidden">Add</span>
             </Link>
           </div>
         </div>
 
-        
+        {/* Category Stats */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+          {getCategoryStats().map((stat) => (
+            <div key={stat.name} className="bg-white rounded-xl p-3 shadow-md border border-gray-100 hover:shadow-lg transition-all duration-200">
+              <div className="flex items-center space-x-2">
+                <div className={`w-8 h-8 rounded-lg bg-gradient-to-r ${categoryColors[stat.name as keyof typeof categoryColors]} flex items-center justify-center`}>
+                  <span className="text-white text-sm">{categoryIcons[stat.name as keyof typeof categoryIcons]}</span>
+                </div>
+                <div>
+                  <div className="text-lg font-bold text-gray-900">{stat.count}</div>
+                  <div className="text-xs text-gray-500 truncate">{stat.name}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
 
         {/* Search and Filter */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+        <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-100">
           <div className="flex flex-col lg:flex-row gap-4">
             {/* Search with Icon */}
             <div className="flex-1 relative">
@@ -226,201 +242,163 @@ export default function Commands() {
         </div>
 
         {/* Commands Grid */}
-        <div className="grid gap-6">
-          {filteredCommands.length === 0 ? (
-            <div className="bg-white rounded-2xl shadow-lg p-12 text-center border border-gray-100">
-              <div className="relative inline-block mb-6">
-                <div className="w-24 h-24 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-full flex items-center justify-center">
-                  <div className="text-5xl transform -rotate-12">🔍</div>
-                </div>
-                <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-gradient-to-br from-orange-50 to-red-50 rounded-full flex items-center justify-center border-4 border-white shadow-lg">
-                  <div className="text-lg">⚡</div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+          {filteredCommands.map((command) => (
+            <div key={command.id} className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 overflow-hidden transform hover:scale-[1.01] relative">
+              {/* Command Card Header with Gradient */}
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-3 sm:p-4 border-b border-gray-100">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center space-x-2 sm:space-x-4 min-w-0 flex-1">
+                    <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center shadow-md bg-gradient-to-r ${categoryColors[command.category as keyof typeof categoryColors]} relative flex-shrink-0`}>
+                      <span className="text-white text-lg sm:text-xl">{categoryIcons[command.category as keyof typeof categoryIcons]}</span>
+                      <div className="absolute -top-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-blue-500 rounded-full flex items-center justify-center">
+                        <span className="text-white text-xs">⚡</span>
+                      </div>
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-lg sm:text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors mb-1 truncate">
+                        {command.title}
+                      </h3>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="px-2 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full border border-blue-100">
+                          {command.category}
+                        </span>
+                        <span className="text-xs text-gray-500 flex items-center">
+                          <svg className="w-3 h-3 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                          {command.createdAt}
+                        </span>
+                        <span className="text-xs text-gray-500 flex items-center">
+                          <svg className="w-3 h-3 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                          </svg>
+                          {command.platform === 'all' ? 'All Platforms' : command.platform}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Quick Actions */}
+                  <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
+                    <button className="p-1.5 sm:p-2 text-gray-400 hover:text-blue-600 transition-colors" title="Add to favorites">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                      </svg>
+                    </button>
+                    <button className="p-1.5 sm:p-2 text-gray-400 hover:text-green-600 transition-colors" title="Share command">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">No commands found</h3>
-              <p className="text-gray-600 mb-6 max-w-md mx-auto">
-                {searchTerm || selectedCategory !== 'All' 
-                  ? 'Try adjusting your search terms or selecting a different category to find what you\'re looking for.'
-                  : 'Your command vault is empty. Start building your collection of useful developer commands!'
-                }
-              </p>
-              <div className="space-y-3">
-                <Link
-                  href="/add-command"
-                  className="inline-flex items-center px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105 duration-200 font-semibold"
-                >
-                  <span className="text-lg mr-2">➕</span>
-                  Add Your First Command
-                </Link>
-                {searchTerm || selectedCategory !== 'All' ? (
+
+              <div className="p-4 sm:p-6">
+                {/* Command Block */}
+                <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-xl p-3 sm:p-5 mb-4 relative group/command border border-gray-700 shadow-2xl">
+                  <div className="absolute -top-2 left-4 px-2 sm:px-3 py-1 bg-gradient-to-r from-gray-700 to-gray-600 rounded-lg border border-gray-500">
+                    <span className="text-xs text-gray-200 font-mono font-semibold">⚡ command</span>
+                  </div>
+                  <div className="relative">
+                    <code className="text-green-400 font-mono text-sm sm:text-base block pr-12 sm:pr-16 pt-4 leading-relaxed break-all">
+                      {command.command}
+                    </code>
+                    <div className="absolute top-0 right-0 flex items-center space-x-2">
+                      <div className="flex space-x-1">
+                        <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-red-500"></div>
+                        <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-yellow-500"></div>
+                        <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-green-500"></div>
+                      </div>
+                    </div>
+                  </div>
                   <button
-                    onClick={() => {
-                      setSearchTerm('');
-                      setSelectedCategory('All');
-                    }}
-                    className="mt-4 text-blue-600 hover:text-blue-700 transition-colors flex items-center justify-center w-full font-medium"
+                    onClick={() => copyToClipboard(command.command, command.id)}
+                    className={`absolute top-3 sm:top-5 right-2 sm:right-4 p-2 sm:p-3 rounded-lg transition-all duration-200 ${
+                      copiedId === command.id
+                        ? 'bg-green-600 text-white shadow-lg scale-110'
+                        : 'bg-gray-700 text-gray-300 hover:text-white hover:bg-gray-600 hover:scale-110 shadow-lg'
+                    }`}
+                    title={copiedId === command.id ? "Copied!" : "Copy to clipboard"}
                   >
-                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                    </svg>
-                    Reset filters
+                    {copiedId === command.id ? (
+                      <svg className="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    ) : (
+                      <svg className="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      </svg>
+                    )}
                   </button>
-                ) : (
-                  <p className="text-gray-500 text-sm">
-                    Need inspiration? Check out our sample commands or browse categories above.
-                  </p>
+
+                  {/* Command Actions */}
+                  <div className="mt-3 sm:mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pt-3 border-t border-gray-600">
+                    <div className="flex items-center space-x-2 sm:space-x-3">
+                      <span className="text-xs text-gray-400 font-mono">
+                        {command.platform === 'all' ? '🌐 All Platforms' :
+                         command.platform === 'linux' ? '🐧 Linux' :
+                         command.platform === 'macos' ? '🍎 macOS' :
+                         command.platform === 'windows' ? '🪟 Windows' : command.platform}
+                      </span>
+                      <span className="text-xs text-gray-400">
+                        {command.category}
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <button
+                        className="px-2 sm:px-3 py-1 bg-gray-700 text-gray-300 text-xs rounded-lg hover:bg-gray-600 transition-colors"
+                        title="Run command"
+                      >
+                        ▶️ Run
+                      </button>
+                      <button
+                        className="px-2 sm:px-3 py-1 bg-gray-700 text-gray-300 text-xs rounded-lg hover:bg-gray-600 transition-colors"
+                        title="Save to favorites"
+                      >
+                        ⭐ Save
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Notes */}
+                {command.notes && (
+                  <div className="mb-4">
+                    <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center">
+                      <svg className="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      Notes
+                    </h4>
+                    <p className="text-sm text-gray-600 bg-gray-50 rounded-lg p-3 border border-gray-200">
+                      {command.notes}
+                    </p>
+                  </div>
+                )}
+
+                {/* Tags */}
+                {command.tags && command.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {command.tags.slice(0, 2).map((tag, index) => (
+                      <span
+                        key={index}
+                        className="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-full border border-blue-100"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                    {command.tags.length > 2 && (
+                      <span className="px-2 py-1 bg-gray-50 text-gray-500 text-xs rounded-full border border-gray-200">
+                        +{command.tags.length - 2} more
+                      </span>
+                    )}
+                  </div>
                 )}
               </div>
             </div>
-          ) : (
-            filteredCommands.map((command) => (
-              <div key={command.id} className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 overflow-hidden transform hover:scale-[1.01] relative">
-                {/* Command Card Header with Gradient */}
-                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 border-b border-gray-100">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center space-x-4">
-                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-md bg-gradient-to-r ${categoryColors[command.category as keyof typeof categoryColors]} relative`}>
-                        <span className="text-white text-xl">{categoryIcons[command.category as keyof typeof categoryIcons]}</span>
-                        <div className="absolute -top-1 -right-1 w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
-                          <span className="text-white text-xs">⚡</span>
-                        </div>
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors mb-1">
-                          {command.title}
-                        </h3>
-                        <div className="flex items-center space-x-3">
-                          <span className="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full border border-blue-100">
-                            {command.category}
-                          </span>
-                          <span className="text-xs text-gray-500 flex items-center">
-                            <svg className="w-3 h-3 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            {command.createdAt}
-                          </span>
-                          <span className="text-xs text-gray-500 flex items-center">
-                            <svg className="w-3 h-3 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                            </svg>
-                            {command.platform === 'all' ? 'All Platforms' : command.platform}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Quick Actions */}
-                    <div className="flex items-center space-x-2">
-                      <button className="p-2 text-gray-400 hover:text-blue-600 transition-colors" title="Add to favorites">
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                        </svg>
-                      </button>
-                      <button className="p-2 text-gray-400 hover:text-green-600 transition-colors" title="Share command">
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="p-6">
-                  {/* Command Block */}
-                  <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-xl p-5 mb-4 relative group/command border border-gray-700 shadow-2xl">
-                    <div className="absolute -top-2 left-4 px-3 py-1 bg-gradient-to-r from-gray-700 to-gray-600 rounded-lg border border-gray-500">
-                      <span className="text-xs text-gray-200 font-mono font-semibold">⚡ command</span>
-                    </div>
-                    <div className="relative">
-                      <code className="text-green-400 font-mono text-base block pr-16 pt-4 leading-relaxed break-all">
-                        {command.command}
-                      </code>
-                      <div className="absolute top-0 right-0 flex items-center space-x-2">
-                        <div className="flex space-x-1">
-                          <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                          <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                          <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                        </div>
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => copyToClipboard(command.command, command.id)}
-                      className={`absolute top-5 right-4 p-3 rounded-lg transition-all duration-200 ${
-                        copiedId === command.id 
-                          ? 'bg-green-600 text-white shadow-lg scale-110' 
-                          : 'bg-gray-700 text-gray-300 hover:text-white hover:bg-gray-600 hover:scale-110 shadow-lg'
-                      }`}
-                      title={copiedId === command.id ? "Copied!" : "Copy to clipboard"}
-                    >
-                      {copiedId === command.id ? (
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                      ) : (
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                        </svg>
-                      )}
-                    </button>
-                    
-                    {/* Command Actions */}
-                    <div className="mt-4 flex items-center justify-between pt-3 border-t border-gray-600">
-                      <div className="flex items-center space-x-3">
-                        <span className="text-xs text-gray-400 font-mono">
-                          {command.platform === 'all' ? '🌐 All Platforms' : 
-                           command.platform === 'linux' ? '🐧 Linux' :
-                           command.platform === 'macos' ? '🍎 macOS' :
-                           command.platform === 'windows' ? '🪟 Windows' : command.platform}
-                        </span>
-                        <span className="text-xs text-gray-400">
-                          {command.category}
-                        </span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <button
-                          className="px-3 py-1 bg-gray-700 text-gray-300 text-xs rounded-lg hover:bg-gray-600 transition-colors"
-                          title="Run command"
-                        >
-                          ▶️ Run
-                        </button>
-                        <button
-                          className="px-3 py-1 bg-gray-700 text-gray-300 text-xs rounded-lg hover:bg-gray-600 transition-colors"
-                          title="Save to favorites"
-                        >
-                          ⭐ Save
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                    
-                  {/* Notes */}
-                  {command.notes && (
-                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-100 mb-4">
-                      <div className="flex items-start">
-                        <svg className="w-5 h-5 text-blue-500 mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <p className="text-gray-700 leading-relaxed text-sm">
-                          {command.notes}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Tags */}
-                  {command.tags.length > 0 && (
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {command.tags.map((tag, index) => (
-                        <span key={index} className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full border border-gray-200">
-                          #{tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))
-          )}
+          ))}
         </div>
       </div>
     </Layout>

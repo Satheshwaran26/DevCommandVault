@@ -21,7 +21,7 @@ export default function Sidebar() {
   }, []);
 
   return (
-    <div className="w-64 bg-white min-h-screen border-r border-gray-200 flex-shrink-0">
+    <div className="hidden lg:block w-64 bg-white min-h-screen border-r border-gray-200 flex-shrink-0">
       <div className="p-6">
         <div className="mb-6">
           <h2 className="text-sm uppercase tracking-wider text-gray-500 font-medium">Menu</h2>

@@ -7,13 +7,15 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
       <Navbar />
-      <div className="flex">
+      <div className="flex flex-1 overflow-hidden">
         <Sidebar />
-        <main className="flex-1 p-6 lg:p-8 overflow-auto">
-          <div className="max-w-8xl mx-auto">
-            {children}
+        <main className="flex-1 overflow-auto">
+          <div className="h-full p-4 sm:p-6 lg:p-8">
+            <div className="max-w-7xl mx-auto h-full">
+              {children}
+            </div>
           </div>
         </main>
       </div>
