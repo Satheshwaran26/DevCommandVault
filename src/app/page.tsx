@@ -38,7 +38,7 @@ export default function Dashboard() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-            <p className="text-gray-600 mt-1">Welcome back! Here's what's happening with your developer toolkit.</p>
+            <p className="text-gray-600 mt-1">Welcome back! Here&apos;s what&apos;s happening with your developer toolkit.</p>
           </div>
           <div className="flex items-center space-x-3">
             <span className="text-sm text-gray-500">Last updated: Just now</span>
